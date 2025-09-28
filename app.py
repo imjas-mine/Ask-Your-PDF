@@ -3,8 +3,8 @@ import os
 import streamlit as st
 from PyPDF2 import PdfReader
 from langchain_text_splitters import CharacterTextSplitter
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
 
 
 def main():
@@ -35,6 +35,11 @@ def main():
         #creating embeddings
         embeddings=OpenAIEmbeddings()
         knowledge_base=FAISS.from_texts(chunks,embeddings)
+        
+        user_ques=st.text_input("Ask a question from your pdf")
+        if user_ques:
+            docs=knowledge_base.similarity_search(user_ques)
+            st.write(docs)
         
 
 if __name__=='__main__':
